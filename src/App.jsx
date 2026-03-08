@@ -14,6 +14,7 @@ import VideoAccessPage from './pages/VideoAccessPage';
 // import AccessManager from './pages/AccessManager';
 
 
+
 // Lazy load pages
 const AuthScreen = lazy(() => import('./pages/AuthScreen'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -31,36 +32,13 @@ export default function App() {
         <Routes>
           {/* Public Routes */}
           <Route
+            path="/"
+            element={!user ? <Navigate to="/login" replace /> : <Navigate to="/dashboard" replace />}
+          />
+          <Route
             path="/login"
             element={!user ? <AuthScreen /> : <Navigate to="/dashboard" replace />}
           />
-
-          {/* Protected Routes
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/videos" element={<VideosView />} />
-            <Route path="/videos/:id" element={<VideoPlayer />} />
-            
-            
-            <Route 
-              path="/upload" 
-              element={
-                <ProtectedRoute allowedRoles={['CREATOR', 'ADMIN']}>
-                  <UploadView />
-                </ProtectedRoute>
-              } 
-            />
-            
-            
-            <Route 
-              path="/teams" 
-              element={
-                <ProtectedRoute allowedRoles={['ADMIN', 'TEAM']}>
-                  <TeamsView />
-                </ProtectedRoute>
-              } 
-            />
-          </Route> */}
 
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}> {/* ← LAYOUT HERE */}
@@ -68,13 +46,13 @@ export default function App() {
               <Route path="/videos" element={<VideosView />} />
               <Route path="/videos/:id" element={<VideoPlayer />} />
               <Route
-  path="/videos/:id/access"
-  element={
-    <ProtectedRoute allowedRoles={['CREATOR']}>
-      <VideoAccessPage />
-    </ProtectedRoute>
-  }
-/>
+                path="/videos/:id/access"
+                element={
+                  <ProtectedRoute allowedRoles={['CREATOR']}>
+                    <VideoAccessPage />
+                  </ProtectedRoute>
+                }
+              />
 
               <Route path="/unlock" element={<UnlockVideoPage />} />
               <Route path="/access-requests" element={<AccessRequestsPage />} />
@@ -103,17 +81,8 @@ export default function App() {
             </Route>
           </Route>
 
-          
-
           {/* Fallback */}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-
-          
-
-
-
-
+          <Route path="*" element={<Navigate to="/" replace />} />
 
         </Routes>
       </Suspense>
